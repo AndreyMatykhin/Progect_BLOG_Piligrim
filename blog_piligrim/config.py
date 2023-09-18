@@ -1,3 +1,4 @@
 class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///piligrim.db'
-    SECRET_KEY = '76dfde280ba2455791628bb0b13ce0c6'
+    SECRET_KEY = '5791628bb0b13ce0c676dfde280ba245'
+    SQLALCHEMY_TRACK_MODIFICATIONS=True
