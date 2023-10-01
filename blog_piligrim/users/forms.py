@@ -18,7 +18,6 @@ class RegistrationForm(FlaskForm):
         print('qwert', )
         user = User.query.filter_by(username=username.data).first()
         print('asdf')
-
         if user:
             raise ValidationError('Это имя занято. Пожалуйста, выберите другое имя.')
 
@@ -41,7 +40,7 @@ class UpdateAccountForm(FlaskForm):
     picture = FileField('Обновить фото профиля: ', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Зарегистрироваться')
 
-    def validate_username(self,username):
+    def validate_username(self, username):
         if username.data != current_user.username:
             user = User.query.filter_by(username=username.data).first()
             if user:
@@ -58,8 +57,7 @@ class RequestResetForm(FlaskForm):
     email = StringField('Email: ', validators=[DataRequired(), Email()])
     submit = SubmitField('Изменить пароль')
 
-    @staticmethod
-    def validate_email(email):
+    def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is None:
             raise ValidationError('Аккаунт с данным email отсутсвует. Вы можете зарегистрировать его')

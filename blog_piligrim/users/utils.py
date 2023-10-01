@@ -2,8 +2,9 @@ import os
 from secrets import token_hex
 from PIL import Image
 
-from flask import current_app
-
+from flask import current_app, url_for
+from flask_mail import Message
+from blog_piligrim import mail
 
 def save_picture(form_picture):
     random_hex = token_hex(8)
@@ -15,3 +16,12 @@ def save_picture(form_picture):
     i.thumbnail(output_size)
     i.save(picture_path)
     return picture_fn
+
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Запрос на сброс пароля', sender='blog.piligrim@gmail.com', recipients=[user.email])
+    msg.body = (f'Чтобы сбросить пароль, перейдите по следующей ссылке: '
+                f'{url_for("users.reset_token", token=token, _external=True)}. Если вы не делали этот запрос'
+                f'тогда просто проигнорируйте это письмои никаких изменений не будет.')
+    mail.send(msg)
