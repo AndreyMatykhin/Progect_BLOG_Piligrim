@@ -29,13 +29,13 @@ def new_post():
     return render_template('create_post.html', title='Новый пост', form=form, legend='Новый пост')
 
 
-@posts.route("/post/<int:post_id>")
+@posts.route("/post/<string:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, post=post)
 
 
-@posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
+@posts.route("/post/<string:post_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
@@ -54,7 +54,7 @@ def update_post(post_id):
     return render_template('create_post.html', title='Обновление поста', form=form,
                            legend='Обновление поста')
 
-@posts.route("/post/<int:post_id>/delete",methods=['POST'])
+@posts.route("/post/<string:post_id>/delete",methods=['POST'])
 @login_required
 def delete_post(post_id):
     post=Post.query.get_or_404(post_id)

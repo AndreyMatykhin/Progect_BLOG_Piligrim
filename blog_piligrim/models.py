@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.String(length=36), default=lambda: str(uuid.uuid4()), primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    avatar = db.Column(db.String(20), nullable=False, default='/static/img/default_avatar.jpg')
+    avatar = db.Column(db.String(20), nullable=False, default='default.jpg')
     is_staff = db.Column(db.Boolean, nullable=False, default=False)
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
