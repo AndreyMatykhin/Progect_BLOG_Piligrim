@@ -2,10 +2,11 @@ from flask import Blueprint, redirect, url_for, flash, render_template, request,
 from flask_login import current_user, login_user, login_required, logout_user
 
 from blog_piligrim import db, bcrypt
+from blog_piligrim.main.utils import save_picture
 from blog_piligrim.models import User, Post
 from blog_piligrim.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, \
     ResetPasswordForm
-from blog_piligrim.users.utils import save_picture, send_reset_email
+from blog_piligrim.users.utils import send_reset_email
 
 users = Blueprint('users', __name__)
 
@@ -47,7 +48,7 @@ def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
-            picture_file = save_picture(form.picture.data)
+            picture_file = save_picture(form.picture.data, 'static/profile_pics')
             current_user.avatar = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data

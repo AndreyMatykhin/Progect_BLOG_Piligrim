@@ -1,6 +1,7 @@
-from blog_piligrim import create_app
+# from blog_piligrim import create_app
+from blog_piligrim.admin import app
 
-app = create_app()
+# app = create_app()
 
 
 # @app.cli.command('init-db')

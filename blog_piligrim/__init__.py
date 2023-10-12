@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
@@ -21,6 +22,7 @@ def create_app():
     login_manager.init_app(app)
     bcrypt.init_app(app)
     mail.init_app(app)
+    migrate = Migrate(app, db)
 
     from blog_piligrim.main.routes import main
     from blog_piligrim.users.routes import users
@@ -34,6 +36,11 @@ def create_app():
 
     @app.cli.command('init-db')
     def init_db():
+        db.create_all()
+
+    @app.cli.command('reinit-db')
+    def reinit_db():
+        db.drop_all()
         db.create_all()
 
     return app
