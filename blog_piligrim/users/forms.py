@@ -9,7 +9,7 @@ from blog_piligrim.models import User
 
 class RegistrationForm(FlaskForm):
     username = StringField('Имя пользователя: ', validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email: ', validators=[DataRequired(), Email()])
+    email = StringField('Email: ', validators=[DataRequired(), Email(), Length(min=6, max=200),])
     password = PasswordField('Пароль: ', validators=[DataRequired()])
     confirm_password = PasswordField('Подтвердите пароль: ', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Зарегистрироваться')

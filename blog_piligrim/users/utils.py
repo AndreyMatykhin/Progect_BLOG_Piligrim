@@ -1,6 +1,8 @@
 from flask import url_for
-from flask_mail import Message
-from blog_piligrim import mail
+from flask_mail import Message, Mail
+
+# from blog_piligrim.mainapp import mail
+mail = Mail()
 
 
 def send_reset_email(user):

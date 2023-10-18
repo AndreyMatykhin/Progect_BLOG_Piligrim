@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+Профиль {{ user.username }}
+{% endblock %}
+{% block body %}
+<h1>Уважаемый {{ current_user.username }}, это профиль пользователя {{user.username}}.</h1>
+
+<div class="media">
+    <img class="rounded-circle account-img" src="{{image_file}}">
+    <div class="media-body">
+        <h2 class="account-heading">{{ user.username }}</h2>
+        <p class="text-secondary">{{ user.email }}</p>
+    </div>
+</div>
+<hr>
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+        <a class="nav-link {% if request.endpoint == 'posts.allposts' -%}active{%- endif %}"
+           href="{{ url_for('posts.allposts_of_user', user_id=user.id) }}">Просмотреть все статьи пользователя {{ user.username }} </a>
+    </li>
+</ul>
+
+{% endblock %}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <title>
+        {% block title %}
+        Base block
+        {% endblock %}
+    </title>
+
+</head>
+<body>
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">Blog_PILIGRIM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'users.users_update' -%}active{%- endif %}"
+                           href="{{url_for('users.users_update')}}">Профиль пользователя: {{ current_user.username }}</a>
+                    </li>
+                    {% if current_user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin.index' -%}active{%- endif %}"
+                           href="{{ url_for('admin.index') }}">Администрирование</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'users.allusers' -%}active{%- endif %}"
+                           href="{{ url_for('users.allusers') }}">Все пользователи</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'posts.allposts_of_user' -%}active{%- endif %}"
+                           href="{{ url_for('posts.allposts_of_user', user_id=current_user.id) }}">Мои статьи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'posts.allposts' -%}active{%- endif %}"
+                           href="{{ url_for('posts.allposts') }}">Все статьи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'users.allathors' -%}active{%- endif %}"
+                           href="{{ url_for('users.allathors') }}">Все авторы</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.logout') }}">Выйти</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'users.login' -%}active{%- endif %}"
+                           href="{{ url_for('users.login') }}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'users.register' -%}active{%- endif %}"
+                           href="{{url_for('users.register')}}">Зарегистрироваться</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'posts.allposts' -%}active{%- endif %}"
+                           href="{{ url_for('posts.allposts') }}">Все статьи</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<main role="main" class="container-fluid">
+    <div class="row">
+        <div class="col-md-10">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% block body %}
+            Hello base!
+            {% endblock %}
+
+        </div>
+    </div>
+</main>
+
+<div class="card-footer text-muted">
+    2 days ago
+</div>
+
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}">
+</script>
+
+</body>
+</html>

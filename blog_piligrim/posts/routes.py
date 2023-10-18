@@ -1,20 +1,32 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
 
-from blog_piligrim import db
-from blog_piligrim.main.utils import save_picture
-from blog_piligrim.models import Post, Comment, Like
-from blog_piligrim.posts.forms import PostForm, CommentForm, LikeForm
+from ..mainapp import db
+from ..main.utils import save_picture
+from ..models import Post, Comment, Like
+from ..posts.forms import PostForm, CommentForm, LikeForm
 
 posts = Blueprint('posts', __name__)
 
 
-@posts.route("/allpost")
-@login_required
-def allpost():
+@posts.route("/allposts")
+def allposts():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
-    return render_template('allpost.html', posts=posts)
+    return render_template('post/allposts.html', posts=posts)
+
+
+@posts.route("/allposts_of_user/<string:user_id>")
+def allposts_of_user(user_id):
+    user = Post.query.filter_by(user_id=user_id).first()
+    if user:
+        username=user.author.username
+        page = request.args.get('page', 1, type=int)
+        posts = Post.query.filter_by(user_id=user_id).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+        return render_template('post/allposts_of_user.html', posts=posts, user=username)
+    else:
+        flash("У автора пока нет статей")
+        return redirect(url_for('posts.allposts'))
 
 
 @posts.route("/post/new", methods=['GET', 'POST'])
@@ -23,13 +35,12 @@ def new_post():
     form = PostForm()
     image_file = save_picture(form.picture.data, 'static/posts_pics') if form.picture.data else None
     if form.validate_on_submit():
-        # image_file = save_picture(form.picture.data, 'static/post_pics') if form.picture.data else None
         post = Post(title=form.title.data, content=form.content.data, author=current_user, image_file=image_file)
         db.session.add(post)
         db.session.commit()
         flash("Ваш пост создан!")
-        return redirect(url_for('posts.allpost'))
-    return render_template('create_post.html', title='Новый пост', form=form, legend='Новый пост',
+        return redirect(url_for('posts.allposts'))
+    return render_template('post/create_post.html', title='Новый пост', form=form, legend='Новая статья',
                            image_file=image_file)
 
 
@@ -44,8 +55,8 @@ def post(post_id):
         db.session.add(comment)
         db.session.commit()
         flash('Ваш комментарий добавлен', 'success')
-        return redirect(f'/post/{post_id}')
-    return render_template('post.html', title=post.title, post=post, form=form, like_form=like_form,
+        return redirect(f'/posts/post/{post_id}')
+    return render_template('post/post.html', title=post.title, post=post, form=form, like_form=like_form,
                            like_count=like_count)
 
 
@@ -67,7 +78,7 @@ def update_post(post_id):
         form.title.data = post.title
         form.content.data = post.content
     image_file = url_for('static', filename='posts_pics/' + post.image_file)
-    return render_template('create_post.html', title='Обновление поста', form=form, legend='Обновление поста',
+    return render_template('post/create_post.html', title='Обновление поста', form=form, legend='Обновление поста',
                            image_file=image_file)
 
 
@@ -80,7 +91,7 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     flash("Ваша статья удалена")
-    return redirect(url_for('posts.allpost'))
+    return redirect(url_for('posts.allposts'))
 
 
 @posts.route("/comment/<string:comment_id>/delete", methods=['POST'])

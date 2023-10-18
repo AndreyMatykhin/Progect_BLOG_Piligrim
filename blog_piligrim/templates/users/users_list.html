@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}
+Все пользователи
+{% endblock %}
+{% block body %}
+<h1>{{ context_title }}</h1>
+{% for user in users.items %}
+<div class="container" style="display: flex;">
+    <div class="media" style="display: flex; flex-direction: column;">
+        <img class="rounded-circle article-img" style="margin-right: 5px;"
+             src="{{ url_for('static', filename='profile_pics/' + user.avatar) }}">
+    </div>
+    <div class="card" style="margin-bottom: 20px;">
+        <div class="card-body">
+            <br>
+            <h4 class="card-title"><a class="title"
+                                      href="{{ url_for('users.account', user_id=user.id) }}"
+                                      style="margin: 0 auto;">{{ user.username }}</a></h4>
+            <br>
+            <div class="media-body">
+                <h2 class="account-heading">{{ user.username }}</h2>
+                <p class="text-secondary">{{ user.email }}</p>
+            </div>
+            <a class="nav-link {% if request.endpoint == 'posts.allposts_of_user' -%}active{%- endif %}"
+               href="{{ url_for('posts.allposts_of_user', user_id=user.id) }}">Просмотреть все статьи пользователя {{
+                user.username }} </a>
+        </div>
+
+    </div>
+</div>
+{% endfor %}
+
+{% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+{% if users.page == page_num %}
+<a class="btn btn-success mb-4" href="{{ url_for('users.allusers', page=page_num) }}">{{ page_num }}</a>
+{% else %}
+<a class="btn btn-outline-success mb-4" href="{{ url_for('users.allusers', page=page_num) }}">{{ page_num }}</a>
+{% endif %}
+{% else %}
+...
+{% endif %}
+{% endfor %}
+{% endblock %}
