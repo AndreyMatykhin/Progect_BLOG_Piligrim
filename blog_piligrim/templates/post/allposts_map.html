@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}
+Все статьи
+{% endblock %}
+{% block body %}
+<h1>Все статьи</h1>
+<div class="container" style="display: flex;">
+    {{ post_map|safe }}
+</div>
+{% if current_user.is_authenticated %}
+<hr>
+<a href="{{ url_for('posts.new_post') }}">Создать новую статью</a>
+{% endif %}
+{% endblock %}

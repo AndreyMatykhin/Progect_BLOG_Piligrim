@@ -35,18 +35,48 @@
                 {% endfor %}
             </div>
             {% else %}
-            {{ form.content(class="form-control form-control-lg") }}
+            {{ form.content(class="form-control form-control-lg" ) }}
             {% endif %}
         </div>
-        <div class="form-group">
-            {{ form.picture.label() }}
-            {{ form.picture(class="form-control-file") }}
-            {% if form.picture.errors %}
-            {% for error in form.picture.errors %}
-            <span class="text-danger">{{ error }}</span><br>
-            {% endfor %}
-            {% endif %}
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        {{ form.picture.label() }}
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        {{ form.picture(class="form-control-file") }}
+                        {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Укажите местоположение
+                    </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        {{ post_map|safe }}
+                        {{ form.latitude(class="visually-hidden") }}
+                        {{ form.longitude(class="visually-hidden") }}
+                    </div>
+                </div>
+            </div>
         </div>
+
+
     </fieldset>
     <div class="form-group">
         {{ form.submit(class="btn btn-outline-info") }}

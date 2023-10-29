@@ -26,7 +26,8 @@
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'users.users_update' -%}active{%- endif %}"
-                           href="{{url_for('users.users_update')}}">Профиль пользователя: {{ current_user.username }}</a>
+                           href="{{url_for('users.users_update')}}">Профиль пользователя: {{ current_user.username
+                            }}</a>
                     </li>
                     {% if current_user.is_staff %}
                     <li class="nav-item">
@@ -38,13 +39,25 @@
                            href="{{ url_for('users.allusers') }}">Все пользователи</a>
                     </li>
                     {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'posts.allposts_of_user' -%}active{%- endif %}"
-                           href="{{ url_for('posts.allposts_of_user', user_id=current_user.id) }}">Мои статьи</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'posts.allposts' -%}active{%- endif %}"
-                           href="{{ url_for('posts.allposts') }}">Все статьи</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle
+                         {% if request.endpoint == 'posts.allposts_of_user'-%}active{%- endif%}
+                         {% if request.endpoint == 'posts.allposts_list' -%}active{%- endif %}
+                         {% if request.endpoint == 'posts.allposts_map' -%}active{%- endif %}"
+
+                           href="#" id="navbarDarkDropdownMenuLink" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Статьи
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                            <li><a class="dropdown-item"
+                                   href="{{ url_for('posts.allposts_of_user', user_id=current_user.id) }}">Мои
+                                статьи</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('posts.allposts_list') }}">Все статьи
+                                списком</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('posts.allposts_map') }}">Все статьи на
+                                карте</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'users.allathors' -%}active{%- endif %}"
@@ -62,9 +75,20 @@
                         <a class="nav-link {% if request.endpoint == 'users.register' -%}active{%- endif %}"
                            href="{{url_for('users.register')}}">Зарегистрироваться</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'posts.allposts' -%}active{%- endif %}"
-                           href="{{ url_for('posts.allposts') }}">Все статьи</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle
+                         {% if request.endpoint == 'posts.allposts_list'-%}active{%- endif%}
+                         {% if request.endpoint == 'posts.allposts_map' -%}active{%- endif %}"
+                           href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Статьи
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{{ url_for('posts.allposts_list') }}">Все статьи
+                                списком</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('posts.allposts_map') }}">Все статьи на
+                                карте</a></li>
+                        </ul>
                     </li>
                     {% endif %}
                 </ul>
@@ -91,10 +115,10 @@
 
         </div>
     </div>
+
 </main>
 
 <div class="card-footer text-muted">
-    2 days ago
 </div>
 
 <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}">

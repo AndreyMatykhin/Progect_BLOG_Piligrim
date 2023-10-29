@@ -15,3 +15,29 @@ def save_picture(form_picture, dir_path):
     i.thumbnail(output_size)
     i.save(picture_path)
     return picture_fn
+
+from branca.element import MacroElement
+
+from jinja2 import Template
+
+class LatLngPopup(MacroElement):
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.popup();
+                function latLngPop(e) {
+                    {{this.get_name()}}
+                        .setLatLng(e.latlng)
+                        .setContent("Установить метку здесь" +
+                                    "<br>Latitude: " + e.latlng.lat.toFixed(4) +
+                                    "<br>Longitude: " + e.latlng.lng.toFixed(4))
+                        .openOn({{this._parent.get_name()}});
+                    parent.document.getElementById("latitude").value = e.latlng.lng; 
+                    parent.document.getElementById("longitude").value = e.latlng.lat; 
+                    }
+                {{this._parent.get_name()}}.on('click', latLngPop);
+            {% endmacro %}
+            """)  # noqa
+
+    def __init__(self):
+        super(LatLngPopup, self).__init__()
+        self._name = 'LatLngPopup'

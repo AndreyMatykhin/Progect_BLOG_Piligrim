@@ -26,6 +26,7 @@ mainapp.register_blueprint(posts, url_prefix="/posts")
 mainapp.register_blueprint(errors)
 
 cfg_name = os.environ.get("CONFIG_NAME") or "ProductionConfig"
+# cfg_name = "DevConfig"
 mainapp.config.from_object(f"blog_piligrim.configs.{cfg_name}")
 print(__name__, cfg_name)
 db.init_app(mainapp)

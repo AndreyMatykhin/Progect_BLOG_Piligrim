@@ -10,4 +10,7 @@ RUN pip install -r requirements.txt
 COPY wsgi.py wsgi.py
 COPY blog_piligrim ./blog_piligrim
 EXPOSE 5000
+CMD ["flask", "init-db"]
+EXPOSE 5000
+
 CMD ["python", "wsgi.py"]

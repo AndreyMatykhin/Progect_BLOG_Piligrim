@@ -11,8 +11,18 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.String(length=36), db.ForeignKey('user.id'), nullable=False)
     comments = db.relationship('Comment', backref='title', lazy='select', cascade='all, delete-orphan')
-    image_file = db.Column(db.String(20), nullable=False, default='default.png')
+    image_file = db.Column(db.String(20), nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+    latitude = db.Column(db.Float, nullable=True)
 
     def __repr__(self):
         return f'Запись {self.title}, {self.date_posted}'
+
+
+def default_location():
+    all_longitude = [el.longitude for el in Post.query.all() if el.longitude]
+    all_latitude = [el.latitude for el in Post.query.all() if el.latitude]
+    averge_longitude = sum(all_longitude)/len(all_longitude) if len(all_latitude) else 59.9391
+    averge_latitude = sum(all_latitude)/len(all_latitude) if len(all_latitude) else 30.3155
+    return averge_longitude, averge_latitude
 

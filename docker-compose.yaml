@@ -19,7 +19,7 @@ services:
       context: .
     environment:
       SQLALCHEMY_DATABASE_URI: 'postgresql://user:password@pg:5432/blog_piligrim'
-      CONFIG_NAME: 'DevConfig'
+#      CONFIG_NAME: 'DevConfig'
     volumes:
     - ./blog_piligrim:/mainapp/blog_piligrim
     ports:

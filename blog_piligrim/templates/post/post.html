@@ -16,7 +16,7 @@
             <small>Опубликовано {{ post.date_posted.strftime('%A, %d %B %Y %I:%M %p') }}</small>
             <br>
             <br>
-            {% if post.image_file != 'default.png' %}
+            {% if post.image_file %}
             <div class="form-group">
                 <img style="margin-right: 5px;" src="{{ url_for('static', filename='posts_pics/' + post.image_file) }}">
             </div>
@@ -29,6 +29,25 @@
                     {{ like_count if like_count > 0 }}
                 </button>
             </form>
+            {% if post_map %}
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                aria-controls="flush-collapseTwo">
+                            Просмотр местоположения
+                        </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                         data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            {{ post_map|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
         <div class="card-footer" style="font-size: 20px;">
             {% if post.author == current_user %}
@@ -49,7 +68,8 @@
             <h5>Комментарии: </h5>
             <p>{% for comment in post.comments | reverse %}
             <p style="font-size: 14px;">{{ comment.body }}</p>
-            <small style="font-size: 12px">Автор: {{ comment.username }} Дата: {{ comment.timestamp.strftime('%A, %d %B %Y %I:%M %p') }}</small>
+            <small style="font-size: 12px">Автор: {{ comment.username }} Дата: {{ comment.timestamp.strftime('%A, %d %B
+                %Y %I:%M %p') }}</small>
             {% if comment.username == current_user.username %}
             <form action="{{ url_for('posts.delete_comment', comment_id=comment.id) }}" method="POST">
                 <input class="submit small" type="submit" value="Удалить">
@@ -80,8 +100,8 @@
 
                         <p style="padding-top: 15px"><span>&nbsp;</span>
                             <input class="submit small" type="submit"
-                                                                               name="submit"
-                                                                               value="Сохранить"/></p>
+                                   name="submit"
+                                   value="Сохранить"/></p>
                     </div>
                 </form>
             </div>
